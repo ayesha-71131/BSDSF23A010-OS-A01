@@ -1,6 +1,6 @@
-# Simple Makefile for Static Library
+# Makefile for Dynamic Library Only
 CC = gcc
-CFLAGS = -I./include -Wall -Wextra
+CFLAGS = -I./include -Wall -Wextra -fPIC
 
 # Directories
 SRC_DIR = src
@@ -11,37 +11,39 @@ BIN_DIR = bin
 # Library files
 LIB_SOURCES = $(SRC_DIR)/mystrfunctions.c $(SRC_DIR)/myfilefunctions.c
 LIB_OBJECTS = $(OBJ_DIR)/mystrfunctions.o $(OBJ_DIR)/myfilefunctions.o
-LIBRARY = $(LIB_DIR)/libmputils.a
+
+# Dynamic library
+DYNAMIC_LIB = $(LIB_DIR)/libmputils.so
+TARGET = $(BIN_DIR)/client_dynamic
 
 # Main program
 MAIN_SOURCE = $(SRC_DIR)/main.c
-TARGET = $(BIN_DIR)/client_static
 
 .PHONY: all clean run
 
 # Default target
 all: $(TARGET)
 
-# Create directories if they don't exist
+# Create directories
 $(OBJ_DIR) $(LIB_DIR) $(BIN_DIR):
 	mkdir -p $@
 
-# Compile library object files
+# Compile object files with -fPIC (for dynamic library)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Create static library
-$(LIBRARY): $(LIB_OBJECTS) | $(LIB_DIR)
-	ar rcs $@ $^
+# Create dynamic library
+$(DYNAMIC_LIB): $(LIB_OBJECTS) | $(LIB_DIR)
+	$(CC) -shared $^ -o $@
 
-# Link main program with static library
-$(TARGET): $(MAIN_SOURCE) $(LIBRARY) | $(BIN_DIR)
+# Link main program with dynamic library
+$(TARGET): $(MAIN_SOURCE) $(DYNAMIC_LIB) | $(BIN_DIR)
 	$(CC) $(CFLAGS) $< -L$(LIB_DIR) -lmputils -o $@
 
-# Run the program
+# Run the program (will need LD_LIBRARY_PATH)
 run: $(TARGET)
-	./$(TARGET)
+	LD_LIBRARY_PATH=./lib ./$(TARGET)
 
-# Clean up
+# Clean everything
 clean:
 	rm -rf $(OBJ_DIR) $(LIB_DIR) $(BIN_DIR)

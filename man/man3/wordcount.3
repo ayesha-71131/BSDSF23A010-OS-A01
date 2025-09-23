@@ -1,0 +1,16 @@
+.TH WORDCOUNT 3 "2025-09-23" "libmputils" "Library Functions"
+.SH NAME
+wordCount \- count lines, words, and characters in a file
+.SH SYNOPSIS
+.nf
+.B #include <myfilefunctions.h>
+.sp
+.BI "int wordCount(FILE *" file ", int *" lines ", int *" words ", int *" chars );
+.fi
+.SH DESCRIPTION
+.B wordCount()
+reads the file pointed to by
+.I file
+and returns counts of lines, words, and characters via the provided pointers.
+.SH AUTHOR
+Ayesha Waheed <bsdsf23a010@pucit.edu.pk>

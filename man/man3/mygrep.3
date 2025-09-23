@@ -1,0 +1,20 @@
+.TH MYGREP 3 "2025-09-23" "libmputils" "Library Functions"
+.SH NAME
+mygrep \- search for a string in a file
+.SH SYNOPSIS
+.nf
+.B #include <myfilefunctions.h>
+.sp
+.BI "int mygrep(FILE *" fp ", const char *" search_str ", char ***" matches );
+.fi
+.SH DESCRIPTION
+.B mygrep()
+searches for lines containing
+.I search_str
+in the file
+.IR fp ,
+and returns matching lines in the
+.I matches
+array.
+.SH AUTHOR
+Ayesha Waheed <bsdsf23a010@pucit.edu.pk>

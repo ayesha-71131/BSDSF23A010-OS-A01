@@ -17,7 +17,7 @@ LIBRARY = $(LIB_DIR)/libmputils.a
 MAIN_SOURCE = $(SRC_DIR)/main.c
 TARGET = $(BIN_DIR)/client_static
 
-.PHONY: all clean run
+.PHONY: all clean run install
 
 # Default target
 all: $(TARGET)
@@ -41,6 +41,17 @@ $(TARGET): $(MAIN_SOURCE) $(LIBRARY) | $(BIN_DIR)
 # Run the program
 run: $(TARGET)
 	./$(TARGET)
+
+# Install target
+install: $(TARGET)
+	# Install the executable
+	sudo cp $(TARGET) /usr/local/bin/client
+	# Install man pages
+	sudo mkdir -p /usr/local/man/man3
+	sudo cp man/man3/*.3 /usr/local/man/man3/
+	# Update man database
+	sudo mandb
+	@echo "Installation completed successfully!"
 
 # Clean up
 clean:
